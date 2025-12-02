@@ -39,7 +39,7 @@ export function SignupForm({
                   required
                   className="font-sans border border-foreground/30 rounded-3xl"
                 />
-                <FieldDescription>
+                <FieldDescription className="text-xs text-muted-foreground">
                   We&apos;ll use this to contact you. We will not share your
                   email with anyone else.
                 </FieldDescription>
@@ -75,7 +75,7 @@ export function SignupForm({
                     />
                   </Field>
                 </Field>
-                <FieldDescription>
+                <FieldDescription className="text-xs text-muted-foreground">
                   Must be at least 8 characters long.
                 </FieldDescription>
               </Field>
@@ -98,6 +98,7 @@ export function SignupForm({
                     alt="Microsoft"
                     width={20}
                     height={20}
+                    className="rounded-full"
                   />
                   <span className="sr-only">Login with Microsoft</span>
                 </Button>
@@ -106,7 +107,13 @@ export function SignupForm({
                   type="button"
                   className="flex items-center justify-center border-foreground/30 rounded-3xl"
                 >
-                  <Image src={google} alt="Google" width={20} height={20} />
+                  <Image
+                    src={google}
+                    alt="Google"
+                    width={20}
+                    height={20}
+                    className="rounded-full"
+                  />
                   <span className="sr-only">Login with Google</span>
                 </Button>
                 <Button
@@ -114,7 +121,13 @@ export function SignupForm({
                   type="button"
                   className="flex items-center justify-center border-foreground/30 rounded-3xl"
                 >
-                  <Image src={github} alt="GitHub" width={20} height={20} />
+                  <Image
+                    src={github}
+                    alt="GitHub"
+                    width={20}
+                    height={20}
+                    className="rounded-full"
+                  />
                   <span className="sr-only">Login with GitHub</span>
                 </Button>
               </Field>
@@ -129,7 +142,7 @@ export function SignupForm({
               alt="Image"
               width={500}
               height={500}
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.8]"
             />
           </div>
         </CardContent>

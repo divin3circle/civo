@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Rubik } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -32,9 +35,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${rubik.variable} ${geistMono.variable} antialiased`}>
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <ThemeToggle />
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

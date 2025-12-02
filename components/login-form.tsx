@@ -81,6 +81,7 @@ export function LoginForm({
                     alt="Microsoft"
                     width={20}
                     height={20}
+                    className="rounded-full"
                   />
                   <span className="sr-only">Login with Microsoft</span>
                 </Button>
@@ -89,7 +90,13 @@ export function LoginForm({
                   type="button"
                   className="flex items-center justify-center border-foreground/30 rounded-3xl"
                 >
-                  <Image src={google} alt="Google" width={20} height={20} />
+                  <Image
+                    src={google}
+                    alt="Google"
+                    width={20}
+                    height={20}
+                    className="rounded-full"
+                  />
                   <span className="sr-only">Login with Google</span>
                 </Button>
                 <Button
@@ -97,7 +104,13 @@ export function LoginForm({
                   type="button"
                   className="flex items-center justify-center border-foreground/30 rounded-3xl"
                 >
-                  <Image src={github} alt="GitHub" width={20} height={20} />
+                  <Image
+                    src={github}
+                    alt="GitHub"
+                    width={20}
+                    height={20}
+                    className="rounded-full"
+                  />
                   <span className="sr-only">Login with GitHub</span>
                 </Button>
               </Field>
@@ -112,7 +125,7 @@ export function LoginForm({
               alt="Image"
               width={500}
               height={500}
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.8]"
             />
           </div>
         </CardContent>
