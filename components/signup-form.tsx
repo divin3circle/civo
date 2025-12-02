@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,16 +13,56 @@ import {
 import { Input } from "@/components/ui/input";
 import { microsoft, google, github, register } from "@/assets";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { auth } from "@/config/firebase.config";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push("/");
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    try {
+      setLoading(true);
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error((error as Error).message);
+      toast.error("Failed to create account");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className={cn("flex flex-col gap-6 font-sans", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-semibold">Create your account</h1>
@@ -38,6 +80,8 @@ export function SignupForm({
                   placeholder="m@example.com"
                   required
                   className="font-sans border border-foreground/30 rounded-3xl"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <FieldDescription className="text-xs text-muted-foreground">
                   We&apos;ll use this to contact you. We will not share your
@@ -58,6 +102,8 @@ export function SignupForm({
                       type="password"
                       required
                       className="font-sans border border-foreground/30 rounded-3xl"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </Field>
                   <Field>
@@ -72,6 +118,8 @@ export function SignupForm({
                       type="password"
                       required
                       className="font-sans border border-foreground/30 rounded-3xl"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                   </Field>
                 </Field>
@@ -80,8 +128,16 @@ export function SignupForm({
                 </FieldDescription>
               </Field>
               <Field>
-                <Button type="submit" className="font-semibold rounded-3xl">
-                  Create Account
+                <Button
+                  disabled={loading}
+                  type="submit"
+                  className="font-semibold rounded-3xl"
+                >
+                  {loading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Create Account"
+                  )}
                 </Button>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
