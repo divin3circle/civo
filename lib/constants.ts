@@ -1,7 +1,7 @@
 import { badge100kg, badge500kg, badgeHero } from "@/assets";
 
 export interface BadgeType {
-  id: number;
+  id: string;
   name: string;
   description: string;
   image: string;
@@ -17,31 +17,31 @@ export interface NavLinkType {
 
 export const BADGES = [
   {
-    id: 1,
+    id: "badge500kg",
     name: "Alchemist",
     description: "Saved 500kg of CO2 in your first year on Civo",
     image: badge500kg,
     nftTokenId: "0.0.78569",
     rarity: "Ultra Rare",
-    hbarPrice: "1000000",
+    hbarPrice: "1000",
   },
   {
-    id: 2,
+    id: "badge100kg",
     name: "Green Print",
     description: "Saved 100kg of CO2 in your first month on Civo",
     image: badge100kg,
     nftTokenId: "0.0.77584",
     rarity: "Rare",
-    hbarPrice: "10000",
+    hbarPrice: "100",
   },
   {
-    id: 3,
+    id: "badgeHero",
     name: "Hero of the Forest",
     description: "Logged carbon data for 30 Days straight",
     image: badgeHero,
     nftTokenId: "0.0.78569",
     rarity: "Legendary",
-    hbarPrice: "10000",
+    hbarPrice: "10",
   },
 ];
 

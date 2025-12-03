@@ -2,7 +2,7 @@
 import { BadgeType } from "@/lib/constants";
 import React, { createContext, useContext } from "react";
 import Image from "next/image";
-import { useAuth } from "@/contexts/AuthContext";
+import { useCheckBadge } from "@/hooks/use-badge";
 
 interface BadgeContextType {
   badge: BadgeType;
@@ -33,7 +33,7 @@ function Badge({ children, badge }: BadgeProviderProps) {
 
 Badge.Image = function BadgeImage({ className }: { className?: string }) {
   const { badge } = useBadge();
-  const { user } = useAuth();
+  const { data: isBadgeEarned = false } = useCheckBadge(badge.id);
   return (
     <Image
       src={badge.image}
@@ -41,8 +41,8 @@ Badge.Image = function BadgeImage({ className }: { className?: string }) {
       width={100}
       height={100}
       style={{
-        filter: "grayscale(100%)",
-        opacity: 0.9,
+        filter: isBadgeEarned ? "none" : "grayscale(100%)",
+        opacity: isBadgeEarned ? 1 : 0.5,
         transition: "all 0.3s ease",
       }}
       className={className}

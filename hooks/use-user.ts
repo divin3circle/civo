@@ -1,4 +1,6 @@
 import { db } from "@/config/firebase.config";
+import { useAuth } from "@/contexts/AuthContext";
+import { useQuery } from "@tanstack/react-query";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
@@ -89,6 +91,28 @@ export async function getOrCreateUser(
   }
 }
 
+async function getUser(
+  userId: string | undefined
+): Promise<UserData | undefined> {
+  if (!userId) {
+    return undefined;
+  }
+
+  try {
+    const userDocRef = doc(db, "users", userId);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      return userDocSnap.data() as UserData;
+    } else {
+      return undefined;
+    }
+  } catch (error) {
+    console.error("Error getting user:", (error as Error).message);
+    return undefined;
+  }
+}
+
 export function generateUserId() {
   return uuidv4();
 }
@@ -99,4 +123,12 @@ export function isValidUsername(username: string) {
     username.length >= 3 &&
     username.length <= 20
   );
+}
+
+export function useGetUser() {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: ["user", user?.uid],
+    queryFn: () => getUser(user?.uid),
+  });
 }
