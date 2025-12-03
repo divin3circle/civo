@@ -17,18 +17,25 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   onAuthStateChanged,
+  signInWithPopup,
+  GithubAuthProvider,
+  OAuthProvider,
 } from "firebase/auth";
 import { auth } from "@/config/firebase.config";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { generateUserId, isValidUsername, saveNewUser } from "@/hooks/use-user";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -36,7 +43,7 @@ export function SignupForm({
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        router.push("/");
+        router.push("/dashboard");
       }
     });
     return () => unsubscribe();
@@ -46,18 +53,108 @@ export function SignupForm({
     e.preventDefault();
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (!isValidUsername(userName)) {
+      toast.error("Invalid username");
+      setError(
+        "Invalid username, must be 3-20 characters long and only contain letters and numbers"
+      );
       return;
     }
     try {
       setLoading(true);
       await createUserWithEmailAndPassword(auth, email, password);
+      await saveNewUser(generateUserId(), {
+        email: email,
+        name: userName,
+        photoUrl: "",
+        homeLocation: "",
+        dietType: "",
+        currency: "KES",
+        walletAddress: "",
+        totalCO2Saved: "0",
+        streak: "0",
+        longestStreak: "0",
+        lastLoggedDate: "",
+        onboarded: true,
+        createdAt: new Date().toISOString(),
+        badge100Kg: false,
+        badge30Day: false,
+        badgeHero: false,
+      });
+      router.push("/dashboard");
     } catch (error) {
       console.error((error as Error).message);
       toast.error("Failed to create account");
+      setError(
+        "Failed to create account, " + (error as Error).message ||
+          "Unknown error"
+      );
     } finally {
       setLoading(false);
     }
   };
+
+  const handleOAuthSignUp = async (provider: string) => {
+    let providerInstance:
+      | OAuthProvider
+      | GoogleAuthProvider
+      | GithubAuthProvider;
+    switch (provider.toLowerCase()) {
+      case "google":
+        providerInstance = new GoogleAuthProvider();
+        break;
+      case "github":
+        providerInstance = new GithubAuthProvider();
+        break;
+      default:
+        providerInstance = new OAuthProvider("microsoft.com");
+        break;
+    }
+
+    setLoading(true);
+    try {
+      const userCredential = await signInWithPopup(auth, providerInstance);
+
+      if (!userCredential.user) {
+        throw new Error("Failed to sign up with " + provider);
+      }
+      await saveNewUser(userCredential.user.uid, {
+        email: userCredential.user.email || "",
+        name: userCredential.user.displayName || "",
+        photoUrl: userCredential.user.photoURL || "",
+        homeLocation: "",
+        dietType: "",
+        currency: "KES",
+        walletAddress: "",
+        totalCO2Saved: "0",
+        streak: "0",
+        longestStreak: "0",
+        lastLoggedDate: "",
+        onboarded: true,
+        createdAt: new Date().toISOString(),
+        badge100Kg: false,
+        badge30Day: false,
+        badgeHero: false,
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      console.error((error as Error).message);
+      toast.error("Failed to sign up with " + provider.toUpperCase());
+      setError(
+        "Failed to sign up with " +
+          provider.toUpperCase() +
+          ", " +
+          (error as Error).message || "Unknown error"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6 font-sans", className)} {...props}>
       <Card className="overflow-hidden p-0">
@@ -89,6 +186,26 @@ export function SignupForm({
                 </FieldDescription>
               </Field>
               <Field>
+                <FieldLabel
+                  htmlFor="username"
+                  className="font-sans font-semibold"
+                >
+                  Username
+                </FieldLabel>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="Sylus"
+                  required
+                  className="font-sans border border-foreground/30 rounded-3xl"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                />
+                <FieldDescription className="text-xs text-muted-foreground">
+                  Your username will be used to identify you in the app.
+                </FieldDescription>
+              </Field>
+              <Field>
                 <Field className="grid grid-cols-2 gap-4">
                   <Field>
                     <FieldLabel
@@ -103,7 +220,10 @@ export function SignupForm({
                       required
                       className="font-sans border border-foreground/30 rounded-3xl"
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(e) => {
+                        setError("");
+                        setPassword(e.target.value);
+                      }}
                     />
                   </Field>
                   <Field>
@@ -119,7 +239,10 @@ export function SignupForm({
                       required
                       className="font-sans border border-foreground/30 rounded-3xl"
                       value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      onChange={(e) => {
+                        setError("");
+                        setConfirmPassword(e.target.value);
+                      }}
                     />
                   </Field>
                 </Field>
@@ -127,6 +250,11 @@ export function SignupForm({
                   Must be at least 8 characters long.
                 </FieldDescription>
               </Field>
+              {error && (
+                <FieldDescription className="text-xs text-destructive">
+                  {error}
+                </FieldDescription>
+              )}
               <Field>
                 <Button
                   disabled={loading}
@@ -148,6 +276,8 @@ export function SignupForm({
                   variant="outline"
                   type="button"
                   className="flex items-center justify-center border-foreground/30 rounded-3xl"
+                  onClick={() => handleOAuthSignUp("microsoft")}
+                  disabled={loading}
                 >
                   <Image
                     src={microsoft}
@@ -162,6 +292,8 @@ export function SignupForm({
                   variant="outline"
                   type="button"
                   className="flex items-center justify-center border-foreground/30 rounded-3xl"
+                  onClick={() => handleOAuthSignUp("google")}
+                  disabled={loading}
                 >
                   <Image
                     src={google}
@@ -176,6 +308,8 @@ export function SignupForm({
                   variant="outline"
                   type="button"
                   className="flex items-center justify-center border-foreground/30 rounded-3xl"
+                  onClick={() => handleOAuthSignUp("github")}
+                  disabled={loading}
                 >
                   <Image
                     src={github}

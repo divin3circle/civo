@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,11 +12,111 @@ import {
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { github, google, login, microsoft } from "@/assets";
+import { useRouter } from "next/navigation";
+import { auth } from "@/config/firebase.config";
+import {
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  OAuthProvider,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import { getOrCreateUser } from "@/hooks/use-user";
+import { FirebaseError } from "firebase/app";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push("/dashboard");
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push("/dashboard");
+    } catch (error) {
+      console.error((error as FirebaseError).message);
+      toast.error("Failed to login, invalid email or password");
+      setError("Failed to login, invalid email or password");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOAuthLogin = async (provider: string) => {
+    let providerInstance:
+      | OAuthProvider
+      | GoogleAuthProvider
+      | GithubAuthProvider;
+    switch (provider.toLowerCase()) {
+      case "google":
+        providerInstance = new GoogleAuthProvider();
+        break;
+      case "github":
+        providerInstance = new GithubAuthProvider();
+        break;
+      default:
+        providerInstance = new OAuthProvider("microsoft.com");
+        break;
+    }
+    setLoading(true);
+    try {
+      const userCredential = await signInWithPopup(auth, providerInstance);
+      if (!userCredential.user) {
+        throw new Error("Failed to login with " + provider);
+      }
+
+      const userData = await getOrCreateUser(userCredential.user.uid, {
+        email: userCredential.user.email || "",
+        name: userCredential.user.displayName || "",
+        photoUrl: userCredential.user.photoURL || "",
+        currency: "KES",
+      });
+
+      if (!userData) {
+        throw new Error("Failed to initialize user data");
+      }
+
+      const isNewUser = !userData.onboarded;
+      if (isNewUser) {
+        toast.success("Account created! Welcome to Civo");
+      } else {
+        toast.success("Welcome back " + userCredential.user.displayName);
+      }
+
+      router.push("/dashboard");
+    } catch (error) {
+      console.error((error as Error).message);
+      toast.error("Failed to login with " + provider.toUpperCase());
+      setError(
+        "Failed to login with " +
+          provider.toUpperCase() +
+          ", " +
+          (error as Error).message
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className={cn("flex flex-col gap-6 font-sans", className)} {...props}>
       <Card className="overflow-hidden p-0">
@@ -38,6 +139,8 @@ export function LoginForm({
                   placeholder="m@example.com"
                   required
                   className="font-sans border border-foreground/30 rounded-3xl"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Field>
               <Field>
@@ -60,13 +163,27 @@ export function LoginForm({
                   type="password"
                   required
                   className="font-sans border border-foreground/30 rounded-3xl"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Field>
               <Field>
-                <Button type="submit" className="font-semibold rounded-3xl">
-                  Login
+                <Button
+                  disabled={loading}
+                  type="submit"
+                  className="font-semibold rounded-3xl"
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                    handleSubmit(e)
+                  }
+                >
+                  {loading ? <Loader2 className="animate-spin" /> : "Login"}
                 </Button>
               </Field>
+              {error && (
+                <FieldDescription className="text-xs text-destructive">
+                  {error}
+                </FieldDescription>
+              )}
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
               </FieldSeparator>
@@ -75,6 +192,8 @@ export function LoginForm({
                   variant="outline"
                   type="button"
                   className="flex items-center justify-center border-foreground/30 rounded-3xl"
+                  disabled={loading}
+                  onClick={() => handleOAuthLogin("microsoft")}
                 >
                   <Image
                     src={microsoft}
@@ -89,6 +208,8 @@ export function LoginForm({
                   variant="outline"
                   type="button"
                   className="flex items-center justify-center border-foreground/30 rounded-3xl"
+                  disabled={loading}
+                  onClick={() => handleOAuthLogin("google")}
                 >
                   <Image
                     src={google}
@@ -103,6 +224,8 @@ export function LoginForm({
                   variant="outline"
                   type="button"
                   className="flex items-center justify-center border-foreground/30 rounded-3xl"
+                  disabled={loading}
+                  onClick={() => handleOAuthLogin("github")}
                 >
                   <Image
                     src={github}

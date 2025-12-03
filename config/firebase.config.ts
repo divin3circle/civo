@@ -9,6 +9,28 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+if (!env.firebase.apiKey) {
+  throw new Error("Firebase API key is not set");
+}
+if (!env.firebase.authDomain) {
+  throw new Error("Firebase auth domain is not set");
+}
+if (!env.firebase.projectId) {
+  throw new Error("Firebase project id is not set");
+}
+if (!env.firebase.storageBucket) {
+  throw new Error("Firebase storage bucket is not set");
+}
+if (!env.firebase.messagingSenderId) {
+  throw new Error("Firebase messaging sender id is not set");
+}
+if (!env.firebase.appId) {
+  throw new Error("Firebase app id is not set");
+}
+if (!env.firebase.measurementId) {
+  throw new Error("Firebase measurement id is not set");
+}
 const firebaseConfig = {
   apiKey: env.firebase.apiKey,
   authDomain: env.firebase.authDomain,
