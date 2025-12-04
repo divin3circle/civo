@@ -67,7 +67,7 @@ function Dashboard() {
             className="w-full mt-4 object-cover rounded-3xl"
           />
           <div className="mt-4">
-            <h2 className="text-lg font-medium">Recent Emissions</h2>
+            <h2 className="text-lg font-medium">Recent Emissions Advice</h2>
             <p className="text-sm font-sans leading-relaxed text-muted-foreground">
               {mockEmissionLogs[mockEmissionLogs.length - 1].aiAdvice}
             </p>
