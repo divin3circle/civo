@@ -10,7 +10,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { BADGES } from "@/lib/constants";
 import Badge from "./ui/badge";
 import Link from "next/link";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, LogOut } from "lucide-react";
+import { Button } from "./ui/button";
 export function ProfileAvatar() {
   const { user } = useAuth();
 
@@ -48,10 +49,18 @@ export function ProfileAvatar() {
             </div>
           </div>
           <div className="grid gap-2">
-            <p className="text-muted-foreground text-xs">
-              Logged in as {user.displayName} ({user.email?.slice(0, 4)}...
-              {user.email?.slice(-12)})
-            </p>
+            <div className="flex items-center justify-between">
+              <p className="text-muted-foreground text-xs flex flex-col">
+                Logged in as {user.displayName}{" "}
+                <span className="text-primary text-xs">
+                  ({user.email?.slice(0, 4)}...
+                  {user.email?.slice(-12)})
+                </span>
+              </p>
+              <Button variant="outline" size="icon">
+                <LogOut className="w-4 h-4" />
+              </Button>
+            </div>
             <Link
               href="/profile"
               className="w-full items-center text-center justify-center flex gap-2 group"

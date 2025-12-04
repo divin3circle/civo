@@ -4,7 +4,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/config/firebase.config";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/navbar";
-// import { useGetUser } from "@/hooks/use-user";
+import GlobalEmission from "@/components/global-emission";
+import DashboardEmission from "@/components/dashboard-emission-stats";
 
 function Dashboard() {
   const router = useRouter();
@@ -19,8 +20,12 @@ function Dashboard() {
   }, [router]);
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-2">
       <Navbar />
+      <div className="mt-4 flex flex-col w-full md:flex-row">
+        <GlobalEmission />
+        <DashboardEmission />
+      </div>
     </div>
   );
 }

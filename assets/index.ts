@@ -10,3 +10,7 @@ export const github = "/github.png";
 export const badge500kg = "/500kg.png";
 export const badge100kg = "/100kg.png";
 export const badgeHero = "/streak.png";
+
+export const foodEmission = "/food.png";
+export const transportationEmission = "/transport.png";
+export const energyEmission = "/energy.png";

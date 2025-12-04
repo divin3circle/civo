@@ -44,7 +44,7 @@ export function HeroSection() {
           duration: 0.5,
           ease: [0.4, 0.0, 0.2, 1],
         }}
-        className="flex gap-4 mt-12 w-full items-center justify-between flex-col md:flex-row md:justify-center"
+        className="flex mx-2 gap-4 mt-12 w-full items-center justify-between flex-col md:flex-row md:justify-center"
       >
         <Button
           variant="default"
