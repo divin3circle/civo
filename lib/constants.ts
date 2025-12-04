@@ -15,6 +15,37 @@ export interface NavLinkType {
   href: string;
 }
 
+interface TransportEmission {
+  mode: string;
+  distance: number;
+  co2e: number;
+  price: number;
+}
+
+interface FoodEmission {
+  meals: string[];
+  price: number;
+  co2e: number;
+}
+
+interface EnergyEmission {
+  units: number;
+  price: number;
+  co2e: number;
+}
+
+export interface EmissionLog {
+  id: string;
+  transport: TransportEmission;
+  food: FoodEmission;
+  energy: EnergyEmission;
+  totalEmission: number;
+  totalSpending: number;
+  aiAdvice: string;
+  aiScore: number;
+  date: string;
+}
+
 export const BADGES = [
   {
     id: "badge500kg",
