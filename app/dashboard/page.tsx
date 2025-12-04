@@ -53,7 +53,7 @@ function Dashboard() {
       </div>
       <div className="mt-8 flex flex-col gap-4 md:flex-row">
         <EmissionLogsChart />
-        <div className="w-full md:w-1/3 border border-foreground/20 rounded-3xl p-4">
+        <div className="w-full md:w-1/3 border border-foreground/20 rounded-3xl p-4 mb-4 md:mb-0">
           <h2 className="text-lg font-bold">Azure AI Emission Coach</h2>
           <p className="text-xs text-muted-foreground">
             Get personalized calculations and advice on how to reduce your

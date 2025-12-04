@@ -80,7 +80,7 @@ export function EmissionLogsChart() {
   }
 
   return (
-    <Card className="w-full md:w-2/3 shadow-none border border-foreground/20 rounded-3xl">
+    <Card className="w-full md:w-2/3 bg-background shadow-none border border-foreground/20 rounded-3xl">
       <CardHeader>
         <CardTitle>Daily Emissions Logs</CardTitle>
         <CardDescription>
