@@ -24,7 +24,7 @@ export const mockEmissionLogs: EmissionLog[] = [
     totalSpending: 24.8,
     aiAdvice:
       "Consider using public transport for shorter distances to reduce your transport emissions by 30%.",
-    aiScore: 72,
+    aiScore: 3,
   },
   {
     id: "log-2",
@@ -49,7 +49,7 @@ export const mockEmissionLogs: EmissionLog[] = [
     totalSpending: 11.9,
     aiAdvice:
       "Great job using public transport! Your emissions are 45% lower than average.",
-    aiScore: 88,
+    aiScore: 4,
   },
   {
     id: "log-3",
@@ -74,7 +74,7 @@ export const mockEmissionLogs: EmissionLog[] = [
     totalSpending: 16.6,
     aiAdvice:
       "Excellent choice using a bicycle! However, consider reducing red meat consumption to lower food emissions.",
-    aiScore: 75,
+    aiScore: 3,
   },
   {
     id: "log-4",
@@ -99,7 +99,7 @@ export const mockEmissionLogs: EmissionLog[] = [
     totalSpending: 35.1,
     aiAdvice:
       "Long car trips significantly increase emissions. Consider carpooling or planning trips more efficiently.",
-    aiScore: 65,
+    aiScore: 2,
   },
   {
     id: "log-5",
@@ -124,7 +124,7 @@ export const mockEmissionLogs: EmissionLog[] = [
     totalSpending: 10.6,
     aiAdvice:
       "Outstanding! Your plant-based meals and walking have resulted in minimal emissions. Keep it up!",
-    aiScore: 95,
+    aiScore: 5,
   },
   {
     id: "log-6",
@@ -149,7 +149,7 @@ export const mockEmissionLogs: EmissionLog[] = [
     totalSpending: 24.7,
     aiAdvice:
       "Motorcycle is better than a car, but processed foods increase your carbon footprint. Try homemade meals.",
-    aiScore: 68,
+    aiScore: 2,
   },
   {
     id: "log-7",
@@ -174,7 +174,7 @@ export const mockEmissionLogs: EmissionLog[] = [
     totalSpending: 29.9,
     aiAdvice:
       "Train travel is excellent for long distances! Your transport emissions are very low.",
-    aiScore: 82,
+    aiScore: 4,
   },
   {
     id: "log-8",
@@ -199,7 +199,7 @@ export const mockEmissionLogs: EmissionLog[] = [
     totalSpending: 15.6,
     aiAdvice:
       "Your food choices are excellent! Consider using an electric vehicle or public transport for short trips.",
-    aiScore: 79,
+    aiScore: 3,
   },
   {
     id: "log-9",
@@ -224,7 +224,7 @@ export const mockEmissionLogs: EmissionLog[] = [
     totalSpending: 15.0,
     aiAdvice:
       "Good balance across all categories! Your daily emissions are below average.",
-    aiScore: 81,
+    aiScore: 4,
   },
   {
     id: "log-10",
@@ -249,6 +249,6 @@ export const mockEmissionLogs: EmissionLog[] = [
     totalSpending: 9.0,
     aiAdvice:
       "Perfect day! Zero transport emissions and plant-based meals. You're setting a great example!",
-    aiScore: 98,
+    aiScore: 5,
   },
 ];

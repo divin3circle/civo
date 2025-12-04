@@ -7,7 +7,7 @@ function DashboardEmission() {
         </div>
         <div className="flex justify-between mt-4 flex-col">
           <div className="flex items-center justify-between border-b border-dashed border-foreground/20 pb-2">
-            <h1 className="text-sm text-muted-foreground">Saved</h1>
+            <h1 className="text-sm text-muted-foreground">Emission</h1>
             <p className="text-sm">100kg </p>
           </div>
           <div className="flex items-center justify-between border-b border-dashed border-foreground/20 pb-2 pt-2">
@@ -25,7 +25,7 @@ function DashboardEmission() {
         </div>
         <div className="flex justify-between mt-4 flex-col">
           <div className="flex items-center justify-between border-b border-dashed border-foreground/20 pb-2">
-            <h1 className="text-sm text-muted-foreground">Saved</h1>
+            <h1 className="text-sm text-muted-foreground">Emission</h1>
             <p className="text-sm">240kg </p>
           </div>
           <div className="flex items-center justify-between border-b border-dashed border-foreground/20 pb-2 pt-2">
@@ -43,7 +43,7 @@ function DashboardEmission() {
         </div>
         <div className="flex justify-between mt-4 flex-col">
           <div className="flex items-center justify-between border-b border-dashed border-foreground/20 pb-2">
-            <h1 className="text-sm text-muted-foreground">Saved</h1>
+            <h1 className="text-sm text-muted-foreground">Emission</h1>
             <p className="text-sm">120kg </p>
           </div>
           <div className="flex items-center justify-between border-b border-dashed border-foreground/20 pb-2 pt-2">

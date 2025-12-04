@@ -14,3 +14,5 @@ export const badgeHero = "/streak.png";
 export const foodEmission = "/food.png";
 export const transportationEmission = "/transport.png";
 export const energyEmission = "/energy.png";
+
+export const azureAiEmissionCoach = "/ms-ai.png";
