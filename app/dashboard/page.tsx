@@ -7,7 +7,7 @@ import { Navbar } from "@/components/navbar";
 import GlobalEmission from "@/components/global-emission";
 import DashboardEmission from "@/components/dashboard-emission-stats";
 import { EmissionLogsChart } from "@/components/emissions-logs-chart";
-import { azureAiEmissionCoach } from "@/assets";
+import { geminiAiEmissionCoach } from "@/assets";
 import Image from "next/image";
 import { mockEmissionLogs } from "@/lib/mock";
 import Link from "next/link";
@@ -54,13 +54,13 @@ function Dashboard() {
       <div className="mt-8 flex flex-col gap-4 md:flex-row">
         <EmissionLogsChart />
         <div className="w-full md:w-1/3 border border-foreground/20 rounded-3xl p-4 mb-4 md:mb-0">
-          <h2 className="text-lg font-bold">Azure AI Emission Coach</h2>
+          <h2 className="text-lg font-bold">Gemini AI Emission Coach</h2>
           <p className="text-xs text-muted-foreground">
             Get personalized calculations and advice on how to reduce your
             emissions.
           </p>
           <Image
-            src={azureAiEmissionCoach}
+            src={geminiAiEmissionCoach}
             alt="Azure AI Emission Coach"
             width={500}
             height={500}
@@ -97,7 +97,7 @@ function Dashboard() {
                 href="/dashboard/coach"
                 className="text-sm rounded-3xl bg-foreground p-2 w-1/2 items-center justify-center flex text-background group hover:bg-foreground/90 transition-all duration-300"
               >
-                View All
+                Chat
                 <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-all duration-300" />
               </Link>
             </div>

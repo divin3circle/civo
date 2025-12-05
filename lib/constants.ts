@@ -21,6 +21,12 @@ interface TransportEmission {
   co2e: number;
   price: number;
 }
+export interface Message {
+  id: string;
+  role: "user" | "model";
+  text: string;
+  timestamp: number;
+}
 
 interface FoodEmission {
   meals: string[];
@@ -90,3 +96,21 @@ export const NAV_LINKS = [
     href: "/ledger",
   },
 ];
+
+export const formatLogsForContext = (logs: EmissionLog[]): string => {
+  if (!logs || logs.length === 0) return "No prior carbon logs available.";
+
+  let context = "User's Recent Carbon Activity Log:\n";
+  logs.forEach((log) => {
+    context += `- Date: ${log.date} | Transport: ${
+      log.transport.mode
+    } | Distance: ${log.transport.distance}km | CO2: ${
+      log.transport.co2e
+    }kg | Food: ${log.food.meals.join(", ")} | Energy: ${
+      log.energy.units
+    }kWh | Total Emissions: ${log.totalEmission}kg | Total Spending: ${
+      log.totalSpending
+    } | Previous Advice: "${log.aiAdvice}"\n`;
+  });
+  return context;
+};

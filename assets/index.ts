@@ -16,3 +16,4 @@ export const transportationEmission = "/transport.png";
 export const energyEmission = "/energy.png";
 
 export const azureAiEmissionCoach = "/ms-ai.png";
+export const geminiAiEmissionCoach = "/gemini.png";
